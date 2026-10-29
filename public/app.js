@@ -1,5 +1,14 @@
 
-const API_URL = "http://127.0.0.1:8000/api/students/";
+// Local dev: frontend on Live Server / file:// talks to Django on :8000.
+// Deployed (Vercel) or served by Django: use the same origin.
+const isLocalFrontend =
+    window.location.protocol === "file:" ||
+    (["localhost", "127.0.0.1"].includes(window.location.hostname) &&
+        window.location.port !== "8000" && window.location.port !== "3000");
+
+const API_URL = isLocalFrontend
+    ? "http://127.0.0.1:8000/api/students/"
+    : "/api/students/";
 
 const form = document.getElementById("studentForm");
 const idInput = document.getElementById("studentId");
@@ -265,7 +274,7 @@ function editStudent(student) {
 function resetForm() {
     form.reset();
     idInput.value = "";
-    formTitle.textContent = "Add a Student";
+    formTitle.textContent = "Add Student";
     saveButton.textContent = "Add Student";
     cancelButton.hidden = true;
 }
@@ -383,10 +392,3 @@ cancelButton.addEventListener("click", () => {
 });
 
 loadStudents();
-
-
-
-
-
-
-
